@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Particle Automata</title>
+		<link rel="stylesheet" href="main.css" />
+	</head>
+	<body>
+		<aside>
+			<h1><a>Particle Automata</a></h1>
+
+			<div class="actions">
+				<button id="saveSettings">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M10 2c-1.716 0-3.408.106-5.07.31C3.806 2.45 3 3.414 3 4.517V17.25a.75.75 0 001.075.676L10 15.082l5.925 2.844A.75.75 0 0017 17.25V4.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0010 2z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+					Save
+				</button>
+				<button id="openLoadSettingsButton">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							d="M3.75 3A1.75 1.75 0 002 4.75v3.26a3.235 3.235 0 011.75-.51h12.5c.644 0 1.245.188 1.75.51V6.75A1.75 1.75 0 0016.25 5h-4.836a.25.25 0 01-.177-.073L9.823 3.513A1.75 1.75 0 008.586 3H3.75zM3.75 9A1.75 1.75 0 002 10.75v4.5c0 .966.784 1.75 1.75 1.75h12.5A1.75 1.75 0 0018 15.25v-4.5A1.75 1.75 0 0016.25 9H3.75z"
+						/>
+					</svg>
+					Load
+				</button>
+				<button id="randomizeSettings">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M10 4.5c1.215 0 2.417.055 3.604.162a.68.68 0 01.615.597c.124 1.038.208 2.088.25 3.15l-1.689-1.69a.75.75 0 00-1.06 1.061l2.999 3a.75.75 0 001.06 0l3.001-3a.75.75 0 10-1.06-1.06l-1.748 1.747a41.31 41.31 0 00-.264-3.386 2.18 2.18 0 00-1.97-1.913 41.512 41.512 0 00-7.477 0 2.18 2.18 0 00-1.969 1.913 41.16 41.16 0 00-.16 1.61.75.75 0 101.495.12c.041-.52.093-1.038.154-1.552a.68.68 0 01.615-.597A40.012 40.012 0 0110 4.5zM5.281 9.22a.75.75 0 00-1.06 0l-3.001 3a.75.75 0 101.06 1.06l1.748-1.747c.042 1.141.13 2.27.264 3.386a2.18 2.18 0 001.97 1.913 41.533 41.533 0 007.477 0 2.18 2.18 0 001.969-1.913c.064-.534.117-1.071.16-1.61a.75.75 0 10-1.495-.12c-.041.52-.093 1.037-.154 1.552a.68.68 0 01-.615.597 40.013 40.013 0 01-7.208 0 .68.68 0 01-.615-.597 39.785 39.785 0 01-.25-3.15l1.689 1.69a.75.75 0 001.06-1.061l-2.999-3z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+					Randomize
+				</button>
+				<button id="resetStrengths">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M7.793 2.232a.75.75 0 01-.025 1.06L3.622 7.25h10.003a5.375 5.375 0 010 10.75H10.75a.75.75 0 010-1.5h2.875a3.875 3.875 0 000-7.75H3.622l4.146 3.957a.75.75 0 01-1.036 1.085l-5.5-5.25a.75.75 0 010-1.085l5.5-5.25a.75.75 0 011.06.025z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+					Reset
+				</button>
+			</div>
+
+			<div class="controls">
+				<!-- Alpha controls -->
+				<div class="controls-section collapsed" id="alphaControls">
+					<div class="controls-section-header">
+						<div class="color-rect alpha main-color-rect"></div>
+
+						<div class="expanded-indicator">
+							<svg
+								class="icon-expanded hide"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+								></path>
+							</svg>
+
+							<svg
+								class="icon-collapsed"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M8.25 4.5l7.5 7.5-7.5 7.5"
+								></path>
+							</svg>
+						</div>
+					</div>
+
+					<div class="controls-section-body">
+						<div id="alphaAlphaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect alpha"></div>
+									<span> - </span>
+									<div class="color-rect alpha"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="alphaBetaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect alpha"></div>
+									<span> - </span>
+									<div class="color-rect beta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="alphaGammaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect alpha"></div>
+									<span> - </span>
+									<div class="color-rect gamma"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="alphaDeltaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect alpha"></div>
+									<span> - </span>
+									<div class="color-rect delta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+					</div>
+				</div>
+				<!-- END alpha controls -->
+
+				<!-- Beta controls -->
+				<div class="controls-section collapsed" id="betaControls">
+					<div class="controls-section-header">
+						<div class="color-rect beta main-color-rect"></div>
+
+						<div class="expanded-indicator">
+							<svg
+								class="icon-expanded hide"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+								></path>
+							</svg>
+
+							<svg
+								class="icon-collapsed"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M8.25 4.5l7.5 7.5-7.5 7.5"
+								></path>
+							</svg>
+						</div>
+					</div>
+
+					<div class="controls-section-body">
+						<div id="betaAlphaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect beta"></div>
+									<span> - </span>
+									<div class="color-rect alpha"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="betaBetaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect beta"></div>
+									<span> - </span>
+									<div class="color-rect beta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="betaGammaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect beta"></div>
+									<span> - </span>
+									<div class="color-rect gamma"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="betaDeltaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect beta"></div>
+									<span> - </span>
+									<div class="color-rect delta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+					</div>
+				</div>
+				<!-- END beta controls -->
+
+				<!-- Gamma controls -->
+				<div class="controls-section collapsed" id="gammaControls">
+					<div class="controls-section-header">
+						<div class="color-rect gamma main-color-rect"></div>
+
+						<div class="expanded-indicator">
+							<svg
+								class="icon-expanded hide"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+								></path>
+							</svg>
+
+							<svg
+								class="icon-collapsed"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M8.25 4.5l7.5 7.5-7.5 7.5"
+								></path>
+							</svg>
+						</div>
+					</div>
+
+					<div class="controls-section-body">
+						<div id="gammaAlphaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect gamma"></div>
+									<span> - </span>
+									<div class="color-rect alpha"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="gammaBetaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect gamma"></div>
+									<span> - </span>
+									<div class="color-rect beta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="gammaGammaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect gamma"></div>
+									<span> - </span>
+									<div class="color-rect gamma"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="gammaDeltaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect gamma"></div>
+									<span> - </span>
+									<div class="color-rect delta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+					</div>
+				</div>
+				<!-- END gamma controls -->
+
+				<!-- Delta controls -->
+				<div class="controls-section" id="deltaControls">
+					<div class="controls-section-header">
+						<div class="color-rect delta main-color-rect"></div>
+
+						<div class="expanded-indicator">
+							<svg
+								class="icon-expanded"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+								></path>
+							</svg>
+
+							<svg
+								class="icon-collapsed hide"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M8.25 4.5l7.5 7.5-7.5 7.5"
+								></path>
+							</svg>
+						</div>
+					</div>
+
+					<div class="controls-section-body">
+						<div id="deltaAlphaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect delta"></div>
+									<span> - </span>
+									<div class="color-rect alpha"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="deltaBetaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect delta"></div>
+									<span> - </span>
+									<div class="color-rect beta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="deltaGammaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect delta"></div>
+									<span> - </span>
+									<div class="color-rect gamma"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+
+						<div id="deltaDeltaStrength" class="strength-control">
+							<div class="strength-header">
+								<div class="color-rect-container">
+									<div class="color-rect delta"></div>
+									<span> - </span>
+									<div class="color-rect delta"></div>
+								</div>
+								<select class="force-type-select">
+									<option value="push">Push</option>
+									<option value="pull">Pull</option>
+								</select>
+							</div>
+							<p class="strength-label">0.00</p>
+							<input type="range" min="0" max="1" step="0.05" value="0" />
+						</div>
+					</div>
+				</div>
+				<!-- END delta controls -->
+			</div>
+		</aside>
+
+		<main>
+			<button id="colorPaletteButton">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class="w-6 h-6"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</button>
+
+			<div class="canvas-container">
+				<canvas id="simulationCanvas" width="500" height="500"> </canvas>
+				<div class="canvas-controls">
+					<button id="restartButton">Restart simulation</button>
+					<div class="pause-play-container">
+						<button id="pauseButton">Pause</button>
+						<button id="playButton" disabled>Play</button>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<div class="overlay hide" id="overlay">
+			<div class="modal hide" id="saveSettingsModal">
+				<div class="modal-header">
+					<h3>Save settings</h3>
+					<span class="close-modal-button">x</span>
+				</div>
+
+				<div class="modal-body">
+					<p>Copy and save this code to save your settings:</p>
+					<p id="saveSettingsCode">Generating...</p>
+				</div>
+
+				<div class="modal-footer">
+					<button class="close-modal-button">Close</button>
+				</div>
+			</div>
+
+			<div class="modal hide" id="loadSettingsModal">
+				<div class="modal-header">
+					<h3>Load settings</h3>
+					<span class="close-modal-button">x</span>
+				</div>
+
+				<div class="modal-body">
+					<p>Paste the code you saved to load your settings:</p>
+					<div class="input-group">
+						<p class="error-message hide">Invalid code.</p>
+						<textarea
+							rows="4"
+							id="loadSettingsInput"
+							placeholder="Settings code..."
+						></textarea>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="close-modal-button secondary">Cancel</button>
+					<button id="loadSettingsButton">Load</button>
+				</div>
+			</div>
+
+			<div class="modal hide" id="colorPaletteModal">
+				<div class="modal-header">
+					<h3>Color palette</h3>
+					<span class="close-modal-button">x</span>
+				</div>
+
+				<div class="modal-body">
+					<div class="color-palette-container">
+						<div
+							class="color-palette color-palette-classic selected"
+							data-palette="classic"
+						>
+							<p>Classic</p>
+							<div class="color-palette-flex">
+								<div></div>
+								<div></div>
+								<div></div>
+								<div></div>
+							</div>
+						</div>
+
+						<div
+							class="color-palette color-palette-pastel"
+							data-palette="pastel"
+						>
+							<p>Pastel</p>
+							<div class="color-palette-flex">
+								<div></div>
+								<div></div>
+								<div></div>
+								<div></div>
+							</div>
+						</div>
+
+						<div
+							class="color-palette color-palette-monochrome"
+							data-palette="monochrome"
+						>
+							<p>Monochrome</p>
+							<div class="color-palette-flex">
+								<div></div>
+								<div></div>
+								<div></div>
+								<div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button id="loadSettingsButton" class="close-modal-button">
+						Close
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+			integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+		<script src="main.js"></script>
+		<script src="input.js"></script>
+	</body>
+</html>
